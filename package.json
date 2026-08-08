@@ -1,0 +1,19 @@
+{
+  "name": "villa-serena-cinematic",
+  "version": "1.0.0",
+  "description": "Ultra-Premium Villa Serena Cinematic Real Estate Showcase Website",
+  "main": "index.html",
+  "scripts": {
+    "dev": "python -m http.server 8080",
+    "start": "python -m http.server 8080"
+  },
+  "keywords": [
+    "real-estate",
+    "cinematic",
+    "scroll-scrub",
+    "gsap",
+    "lenis"
+  ],
+  "author": "",
+  "license": "ISC"
+}

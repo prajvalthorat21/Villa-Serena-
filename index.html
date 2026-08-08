@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Villa Serena | Luxury Cinematic Residence</title>
+  <meta name="description" content="Experience Villa Serena through an immersive cinematic scrolling journey showcasing premium architecture, luxury interiors and timeless storytelling.">
+  
+  <!-- Open Graph / Social Media Meta Tags -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://villaserena.estate/">
+  <meta property="og:title" content="Villa Serena | Luxury Cinematic Residence">
+  <meta property="og:description" content="Experience Villa Serena through an immersive cinematic scrolling journey showcasing premium architecture, luxury interiors and timeless storytelling.">
+  <meta property="og:image" content="Brand/hero-poster.webp">
+  <meta property="og:site_name" content="Villa Serena">
+
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Villa Serena | Luxury Cinematic Residence">
+  <meta name="twitter:description" content="Experience Villa Serena through an immersive cinematic scrolling journey showcasing premium architecture, luxury interiors and timeless storytelling.">
+  <meta name="twitter:image" content="Brand/hero-poster.webp">
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+
+  <!-- Google Fonts Preconnect & Optimization -->
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Lenis CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/lenis@1.1.14/dist/lenis.css">
+
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Subtle Film Grain Overlay -->
+  <div class="grain-overlay" aria-hidden="true"></div>
+
+  <!-- Custom Cursor Elements -->
+  <div class="custom-cursor" id="cursor" aria-hidden="true"></div>
+  <div class="custom-cursor-follower" id="cursor-follower" aria-hidden="true"></div>
+
+  <!-- 1. PRELOADER -->
+  <div class="preloader" id="preloader" role="dialog" aria-label="Loading Villa Serena Experience">
+    <div class="preloader-brand">
+      <img src="Brand/Logo.png" alt="Villa Serena Logo" class="preloader-logo">
+      <h2 class="preloader-title">Villa Serena</h2>
+      <span class="preloader-sub">Lonavala, Pune</span>
+    </div>
+    <div class="preloader-progress-wrap">
+      <div class="preloader-progress-bar">
+        <div class="preloader-progress-fill" id="preloader-fill"></div>
+      </div>
+      <span class="preloader-counter" id="preloader-counter">0%</span>
+    </div>
+  </div>
+
+  <!-- 2. NAVIGATION HEADER -->
+  <header class="site-nav" id="site-nav" role="banner">
+    <a href="#hero" class="nav-brand" aria-label="Villa Serena Home">
+      <img src="Brand/Logo.png" alt="Villa Serena Mark" class="nav-logo-img">
+      <span class="nav-brand-text">Villa Serena</span>
+    </a>
+
+    <nav aria-label="Primary Navigation">
+      <ul class="nav-links">
+        <li><a href="#walkthrough" class="nav-link">Walkthrough</a></li>
+        <li><a href="#amenities" class="nav-link">Amenities</a></li>
+        <li><a href="#gallery" class="nav-link">Gallery</a></li>
+        <li><a href="#location" class="nav-link">Location</a></li>
+        <li><a href="#pricing" class="nav-link">Pricing</a></li>
+      </ul>
+    </nav>
+
+    <div class="nav-actions">
+      <a href="#contact" class="btn-pill btn-primary">
+        <span>Request Viewing</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <button class="burger-btn" id="burger-btn" aria-label="Toggle Navigation Menu">
+        <span class="burger-line"></span>
+        <span class="burger-line"></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile Navigation Drawer -->
+  <div class="mobile-nav-drawer" id="mobile-drawer" aria-label="Mobile Navigation Menu">
+    <ul class="mobile-nav-links">
+      <li><a href="#walkthrough" class="mobile-nav-link">Walkthrough</a></li>
+      <li><a href="#amenities" class="mobile-nav-link">Amenities</a></li>
+      <li><a href="#gallery" class="mobile-nav-link">Gallery</a></li>
+      <li><a href="#location" class="mobile-nav-link">Location</a></li>
+      <li><a href="#pricing" class="mobile-nav-link">Pricing</a></li>
+      <li><a href="#contact" class="mobile-nav-link">Contact</a></li>
+    </ul>
+    <a href="#contact" class="btn-pill btn-primary">Request Private Viewing</a>
+  </div>
+
+  <main role="main">
+    <!-- 3. HERO OVERLAY SECTION -->
+    <section class="hero-wrapper" id="hero" aria-label="Villa Serena Hero Presentation">
+      <div class="hero-overlay">
+        <div class="hero-content">
+          <span class="hero-eyebrow">A Private Residence — Lonavala, Pune</span>
+          <h1 class="hero-title">Villa Serena</h1>
+          <p class="hero-sub">An architectural sanctuary blending monolithic limestone, warm timber, and panoramic cliffside vistas.</p>
+          <div class="hero-scroll-cue">
+            <span class="scroll-cue-line"></span>
+            <span>Scroll to Explore Experience</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. ROOM-BY-ROOM PINNED SCROLL-SCRUB WALKTHROUGH SECTIONS -->
+    <div class="walkthrough-container" id="walkthrough" aria-label="Interactive Room Walkthrough">
+
+      <!-- ROOM 1: Hero-Exterior (Arrival) -->
+      <section class="room-section" id="room-hero-exterior" data-room="Hero-Exterior" data-label="Arrival" data-frames="80" aria-label="Section 1: Entrance Façade">
+        <div class="room-canvas-pin" id="pin-hero-exterior">
+          <canvas class="room-canvas" id="canvas-hero-exterior" aria-label="Interactive frame sequence of Entrance Façade"></canvas>
+          
+          <div class="wt-callout-overlay align-left">
+            <div class="wt-callout" id="callout-hero-exterior">
+              <span class="wt-callout-eyebrow">01 / Entrance Façade</span>
+              <h2 class="wt-callout-title">Architectural Arrival</h2>
+              <p class="wt-callout-copy">A grand entry defined by natural limestone, warm timber accents, and lush tropical flora set against Lonavala’s mist-shrouded hills.</p>
+            </div>
+          </div>
+
+          <div class="wt-room-indicator">
+            <span>01 / 07</span>
+            <span>Arrival</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ROOM 2: Living-Room (Living Room) -->
+      <section class="room-section" id="room-living-room" data-room="Living-Room" data-label="Living Room" data-frames="80" aria-label="Section 2: Grand Living Pavilion">
+        <div class="room-canvas-pin" id="pin-living-room">
+          <canvas class="room-canvas" id="canvas-living-room" aria-label="Interactive frame sequence of Living Room"></canvas>
+          
+          <div class="wt-callout-overlay align-right">
+            <div class="wt-callout" id="callout-living-room">
+              <span class="wt-callout-eyebrow">02 / Grand Living Pavilion</span>
+              <h2 class="wt-callout-title">Double-Height Sanctuary</h2>
+              <p class="wt-callout-copy">Framed by floor-to-ceiling glass, natural daylight floods the soaring living pavilion with seamless indoor-outdoor fluid design.</p>
+            </div>
+          </div>
+
+          <div class="wt-room-indicator">
+            <span>02 / 07</span>
+            <span>Living Room</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ROOM 3: Kitchen (Chef's Kitchen) -->
+      <section class="room-section" id="room-kitchen" data-room="Kitchen" data-label="Kitchen" data-frames="80" aria-label="Section 3: Artisan Kitchen">
+        <div class="room-canvas-pin" id="pin-kitchen">
+          <canvas class="room-canvas" id="canvas-kitchen" aria-label="Interactive frame sequence of Kitchen"></canvas>
+          
+          <div class="wt-callout-overlay align-left">
+            <div class="wt-callout" id="callout-kitchen">
+              <span class="wt-callout-eyebrow">03 / Culinary Suite</span>
+              <h2 class="wt-callout-title">Artisan Chef's Kitchen</h2>
+              <p class="wt-callout-copy">Equipped with custom stone island, premium integrated appliances, and bespoke cabinetry crafted for effortless entertaining.</p>
+            </div>
+          </div>
+
+          <div class="wt-room-indicator">
+            <span>03 / 07</span>
+            <span>Kitchen</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ROOM 4: Master-Suite (Master Suite) -->
+      <section class="room-section" id="room-master-suite" data-room="Master-Suite" data-label="Master Suite" data-frames="80" aria-label="Section 4: Master Suite Sanctuary">
+        <div class="room-canvas-pin" id="pin-master-suite">
+          <canvas class="room-canvas" id="canvas-master-suite" aria-label="Interactive frame sequence of Master Suite"></canvas>
+          
+          <div class="wt-callout-overlay align-right">
+            <div class="wt-callout" id="callout-master-suite">
+              <span class="wt-callout-eyebrow">04 / Private Haven</span>
+              <h2 class="wt-callout-title">Master Suite Sanctuary</h2>
+              <p class="wt-callout-copy">A serene retreat featuring private terrace views, minimalist warm tones, and ambient lighting tailored for restful luxury.</p>
+            </div>
+          </div>
+
+          <div class="wt-room-indicator">
+            <span>04 / 07</span>
+            <span>Master Suite</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ROOM 5: Luxury Bathroom (Primary Bath) -->
+      <section class="room-section" id="room-luxury-bathroom" data-room="Luxury Bathroom" data-label="Primary Bath" data-frames="80" aria-label="Section 5: Primary Bath Retreat">
+        <div class="room-canvas-pin" id="pin-luxury-bathroom">
+          <canvas class="room-canvas" id="canvas-luxury-bathroom" aria-label="Interactive frame sequence of Primary Bath"></canvas>
+          
+          <div class="wt-callout-overlay align-left">
+            <div class="wt-callout" id="callout-luxury-bathroom">
+              <span class="wt-callout-eyebrow">05 / Spa & Wellness</span>
+              <h2 class="wt-callout-title">Primary Bath Retreat</h2>
+              <p class="wt-callout-copy">Featuring monolithic stone basins, rainfall shower fixtures, and serene garden glimpses through frosted privacy louvers.</p>
+            </div>
+          </div>
+
+          <div class="wt-room-indicator">
+            <span>05 / 07</span>
+            <span>Primary Bath</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ROOM 6: Pool-Garden (Pool & Garden) -->
+      <section class="room-section" id="room-pool-garden" data-room="Pool-Garden" data-label="Pool & Garden" data-frames="80" aria-label="Section 6: Horizon Infinity Pool">
+        <div class="room-canvas-pin" id="pin-pool-garden">
+          <canvas class="room-canvas" id="canvas-pool-garden" aria-label="Interactive frame sequence of Pool and Garden"></canvas>
+          
+          <div class="wt-callout-overlay align-right">
+            <div class="wt-callout" id="callout-pool-garden">
+              <span class="wt-callout-eyebrow">06 / Outdoor Oasis</span>
+              <h2 class="wt-callout-title">Horizon Infinity Pool</h2>
+              <p class="wt-callout-copy">A private oasis with crystal water reflecting tropical greenery, expansive sun decks, and curated al fresco lounges.</p>
+            </div>
+          </div>
+
+          <div class="wt-room-indicator">
+            <span>06 / 07</span>
+            <span>Pool & Garden</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ROOM 7: Final-Exterior (The Estate) -->
+      <section class="room-section" id="room-final-exterior" data-room="Final-Exterior" data-label="The Estate" data-frames="80" aria-label="Section 7: The Villa Serena Estate">
+        <div class="room-canvas-pin" id="pin-final-exterior">
+          <canvas class="room-canvas" id="canvas-final-exterior" aria-label="Interactive frame sequence of The Estate"></canvas>
+          
+          <div class="wt-callout-overlay align-left">
+            <div class="wt-callout" id="callout-final-exterior">
+              <span class="wt-callout-eyebrow">07 / Estate Closing</span>
+              <h2 class="wt-callout-title">The Villa Serena Estate</h2>
+              <p class="wt-callout-copy">An unparalleled synthesis of sanctuary, privacy, and architectural mastery in Lonavala’s finest luxury enclave.</p>
+            </div>
+          </div>
+
+          <div class="wt-room-indicator">
+            <span>07 / 07</span>
+            <span>The Estate</span>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- 5. AMENITIES SECTION (Clean 3x2 Grid) -->
+    <section class="amenities-section" id="amenities" aria-label="Property Amenities">
+      <div class="section-header">
+        <span class="section-eyebrow">Curated Features</span>
+        <h2 class="section-title">Uncompromising Luxury</h2>
+        <p class="section-sub">Every detail engineered for quiet indulgence and timeless architectural elegance.</p>
+      </div>
+
+      <div class="amenities-grid">
+        <!-- Card 1 -->
+        <div class="amenity-card" tabindex="0">
+          <div class="amenity-icon-wrap" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M2 12c4 0 4-3 8-3s4 3 8 3 4-3 8-3M2 17c4 0 4-3 8-3s4 3 8 3 4-3 8-3"/></svg>
+          </div>
+          <h3 class="amenity-card-title">Private Infinity Pool</h3>
+          <p class="amenity-card-desc">Temperature-controlled horizon-edge pool overlooking verdant hillside valley mist.</p>
+        </div>
+        <!-- Card 2 -->
+        <div class="amenity-card" tabindex="0">
+          <div class="amenity-icon-wrap" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <h3 class="amenity-card-title">Tropical Landscape</h3>
+          <p class="amenity-card-desc">Private manicured botanical gardens featuring native flora and serene water installations.</p>
+        </div>
+        <!-- Card 3 -->
+        <div class="amenity-card" tabindex="0">
+          <div class="amenity-icon-wrap" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1 .4-1 1v7c0 .6.4 1 1 1h2m10 0a2 2 0 100-4 2 2 0 000 4zm-10 0a2 2 0 100-4 2 2 0 000 4z"/></svg>
+          </div>
+          <h3 class="amenity-card-title">Covered Private Parking</h3>
+          <p class="amenity-card-desc">Multi-vehicle subterranean garage with EV fast-charging ports and direct foyer access.</p>
+        </div>
+        <!-- Card 4 -->
+        <div class="amenity-card" tabindex="0">
+          <div class="amenity-icon-wrap" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+          </div>
+          <h3 class="amenity-card-title">Chef's Kitchen</h3>
+          <p class="amenity-card-desc">Monolithic quartz island, custom European appliances, and concealed secondary preparation pantry.</p>
+        </div>
+        <!-- Card 5 -->
+        <div class="amenity-card" tabindex="0">
+          <div class="amenity-icon-wrap" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 10h6v4H9z"/></svg>
+          </div>
+          <h3 class="amenity-card-title">Double-Height Living</h3>
+          <p class="amenity-card-desc">22-foot ceilings with motorized floor-to-ceiling acoustic glass walls bringing nature inside.</p>
+        </div>
+        <!-- Card 6 -->
+        <div class="amenity-card" tabindex="0">
+          <div class="amenity-icon-wrap" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M5.6 18.4L18.4 5.6"/></svg>
+          </div>
+          <h3 class="amenity-card-title">Bespoke Interiors</h3>
+          <p class="amenity-card-desc">Hand-selected natural timber, honed limestone floors, and integrated concealed climate control.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. GALLERY SECTION (With Autoplaying Motion Video Previews) -->
+    <section class="gallery-section" id="gallery" aria-label="Visual Portfolio Gallery">
+      <div class="section-header">
+        <span class="section-eyebrow">Visual Portfolio</span>
+        <h2 class="section-title">Estate Gallery</h2>
+        <p class="section-sub">Explore the architectural nuances and quiet luxury of Villa Serena.</p>
+      </div>
+
+      <div class="gallery-grid">
+        <!-- Tile 1 -->
+        <div class="gallery-item col-8" tabindex="0" data-src="Gallery/Estate-Exterior/exterior-01.avif" data-video="Gallery/Estate-Exterior/Estate-Exterior.mp4" data-title="Monolithic Exterior Façade" data-cat="Estate Exterior" aria-label="Open Monolithic Exterior Façade in gallery lightbox">
+          <img src="Gallery/Estate-Exterior/exterior-01.avif" alt="Monolithic Exterior Façade" class="gallery-still" loading="lazy">
+          <video class="gallery-motion" muted loop playsinline preload="none">
+            <source src="Gallery/Estate-Exterior/Estate-Exterior.mp4" type="video/mp4">
+          </video>
+          <div class="gallery-overlay">
+            <span class="gallery-category">Estate Exterior</span>
+            <h3 class="gallery-caption">Monolithic Exterior Façade</h3>
+          </div>
+        </div>
+        <!-- Tile 2 -->
+        <div class="gallery-item col-4" tabindex="0" data-src="Gallery/Architectural Details/Architectural Details 01.avif" data-video="Gallery/Architectural Details/Architectural Details.mp4" data-title="Bespoke Floating Staircase" data-cat="Architectural Details" aria-label="Open Floating Staircase in gallery lightbox">
+          <img src="Gallery/Architectural Details/Architectural Details 01.avif" alt="Floating Staircase" class="gallery-still" loading="lazy">
+          <video class="gallery-motion" muted loop playsinline preload="none">
+            <source src="Gallery/Architectural Details/Architectural Details.mp4" type="video/mp4">
+          </video>
+          <div class="gallery-overlay">
+            <span class="gallery-category">Architectural Details</span>
+            <h3 class="gallery-caption">Floating Timber & Metal Staircase</h3>
+          </div>
+        </div>
+        <!-- Tile 3 -->
+        <div class="gallery-item col-5" tabindex="0" data-src="Gallery/Grand-living/living-01.avif" data-video="Gallery/Grand-living/Grand-Living.mp4" data-title="Grand Living Room Pavilion" data-cat="Grand Living" aria-label="Open Sunlit Soaring Living Pavilion in gallery lightbox">
+          <img src="Gallery/Grand-living/living-01.avif" alt="Grand Living Pavilion" class="gallery-still" loading="lazy">
+          <video class="gallery-motion" muted loop playsinline preload="none">
+            <source src="Gallery/Grand-living/Grand-Living.mp4" type="video/mp4">
+          </video>
+          <div class="gallery-overlay">
+            <span class="gallery-category">Grand Living</span>
+            <h3 class="gallery-caption">Sunlit Soaring Living Pavilion</h3>
+          </div>
+        </div>
+        <!-- Tile 4 -->
+        <div class="gallery-item col-7" tabindex="0" data-src="Gallery/Pool-Garden/Pool-Garden 01.avif" data-video="Gallery/Pool-Garden/Pool-Garden.mp4" data-title="Horizon Edge Infinity Pool" data-cat="Pool & Garden" aria-label="Open Horizon Edge Pool in gallery lightbox">
+          <img src="Gallery/Pool-Garden/Pool-Garden 01.avif" alt="Horizon Edge Pool" class="gallery-still" loading="lazy">
+          <video class="gallery-motion" muted loop playsinline preload="none">
+            <source src="Gallery/Pool-Garden/Pool-Garden.mp4" type="video/mp4">
+          </video>
+          <div class="gallery-overlay">
+            <span class="gallery-category">Pool & Garden</span>
+            <h3 class="gallery-caption">Horizon Edge Pool & Tropical Deck</h3>
+          </div>
+        </div>
+        <!-- Tile 5 -->
+        <div class="gallery-item col-6" tabindex="0" data-src="Gallery/Master-Suite/Master-Suite 01.avif" data-video="Gallery/Master-Suite/Master-Suite.mp4" data-title="Master Bedroom Sanctuary" data-cat="Master Suite" aria-label="Open Tranquil Master Suite in gallery lightbox">
+          <img src="Gallery/Master-Suite/Master-Suite 01.avif" alt="Master Bedroom Sanctuary" class="gallery-still" loading="lazy">
+          <video class="gallery-motion" muted loop playsinline preload="none">
+            <source src="Gallery/Master-Suite/Master-Suite.mp4" type="video/mp4">
+          </video>
+          <div class="gallery-overlay">
+            <span class="gallery-category">Master Suite</span>
+            <h3 class="gallery-caption">Tranquil Master Suite</h3>
+          </div>
+        </div>
+        <!-- Tile 6 -->
+        <div class="gallery-item col-6" tabindex="0" data-src="Gallery/Architectural Details/Architectural Details 02.avif" data-video="Gallery/Architectural Details/Architectural Details.mp4" data-title="Honestone Bathroom Detail" data-cat="Architectural Details" aria-label="Open Bathroom Detail in gallery lightbox">
+          <img src="Gallery/Architectural Details/Architectural Details 02.avif" alt="Bathroom Detail" class="gallery-still" loading="lazy">
+          <video class="gallery-motion" muted loop playsinline preload="none">
+            <source src="Gallery/Architectural Details/Architectural Details.mp4" type="video/mp4">
+          </video>
+          <div class="gallery-overlay">
+            <span class="gallery-category">Architectural Details</span>
+            <h3 class="gallery-caption">Honestone & Brass Bath Finishes</h3>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Lightbox Modal -->
+    <div class="lightbox-modal" id="lightbox" role="dialog" aria-modal="true" aria-label="Expanded Gallery Media View">
+      <button class="lightbox-close" id="lightbox-close" aria-label="Close Lightbox">&times;</button>
+      <div class="lightbox-content-wrap">
+        <img src="" alt="Expanded View" id="lightbox-img" class="lightbox-img">
+        <video id="lightbox-video" class="lightbox-video" controls muted loop playsinline></video>
+      </div>
+    </div>
+
+    <!-- 7. LOCATION SECTION (Designed List & Google Map Embed) -->
+    <section class="location-section" id="location" aria-label="Location and Accessibility">
+      <div class="location-wrapper">
+        <div class="location-content">
+          <div>
+            <span class="section-eyebrow">Strategic Enclave</span>
+            <h2 class="location-title">Lonavala, Maharashtra</h2>
+          </div>
+          <p class="location-desc">Nestled amidst lush Western Ghats hillsides, Villa Serena combines total seclusion with swift accessibility to Mumbai and Pune expressways.</p>
+          
+          <div class="location-list">
+            <div class="location-row" tabindex="0">
+              <span class="location-icon" aria-hidden="true">✈️</span>
+              <div class="location-text">
+                <strong>Mumbai Airport (CSMIA)</strong>
+                <span>International gateway</span>
+              </div>
+              <span class="location-time">~95 km · 1hr 45m</span>
+            </div>
+            
+            <div class="location-row" tabindex="0">
+              <span class="location-icon" aria-hidden="true">🚉</span>
+              <div class="location-text">
+                <strong>Lonavala Railway Station</strong>
+                <span>Direct rail access</span>
+              </div>
+              <span class="location-time">2–5 mins</span>
+            </div>
+            
+            <div class="location-row" tabindex="0">
+              <span class="location-icon" aria-hidden="true">🏙️</span>
+              <div class="location-text">
+                <strong>Pune City Centre</strong>
+                <span>Shivajinagar business district</span>
+              </div>
+              <span class="location-time">~65 km · 1hr 20m</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="map-container">
+          <iframe
+            class="location-map-iframe"
+            title="Google Map showing location of Lonavala, Maharashtra"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d60424.34149021703!2d73.37684065609462!3d18.755716174775466!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be801098bdf8145%3A0x696b3967bbbc36e9!2sLonavala%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. PRICING BANNER -->
+    <section class="pricing-section" id="pricing" aria-label="Property Valuation and Specification">
+      <div class="pricing-box">
+        <span class="pricing-eyebrow">Private Offering</span>
+        <div class="pricing-amount">₹2.00 Cr</div>
+        <div class="pricing-specs">
+          <span>2,500 sq.ft. Living Space</span>
+          <span>4 Bedrooms</span>
+          <span>2 Bathrooms</span>
+          <span>Single-Level Design</span>
+          <span>Lonavala, Pune</span>
+        </div>
+        <a href="#contact" class="btn-pill btn-primary">
+          <span>Request a Private Viewing</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </section>
+
+    <!-- 9. CONTACT SECTION -->
+    <section class="contact-section" id="contact" aria-label="Private Concierge Contact">
+      <div class="contact-wrapper">
+        <div class="contact-info">
+          <div>
+            <span class="section-eyebrow">Private Concierge</span>
+            <h2 class="contact-title">Schedule a Viewing</h2>
+          </div>
+          <p class="contact-sub">Private walkthroughs are scheduled exclusively for vetted inquiries. Submit your details below or contact our sales director directly.</p>
+          
+          <div class="direct-channels">
+            <button type="button" class="channel-link" id="copy-email-btn" aria-label="Copy Concierge Email Address">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              <span>Email: villaserena@gmail.com</span>
+            </button>
+
+            <a href="https://instagram.com/raj.thinkss" target="_blank" rel="noopener" class="channel-link" aria-label="Visit Villa Serena on Instagram">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+              <span>Instagram: @raj.thinkss</span>
+            </a>
+
+            <a href="https://wa.me/919876543210" target="_blank" rel="noopener" class="channel-link" aria-label="Open WhatsApp Direct Inquiry">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+              <span>WhatsApp Direct Inquiry</span>
+            </a>
+
+            <a href="tel:+919876543210" class="channel-link" aria-label="Call Sales Director Directly">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              <span>+91 98765 43210</span>
+            </a>
+          </div>
+        </div>
+
+        <form class="contact-form" id="inquiry-form" aria-label="Viewing Inquiry Form">
+          <div class="form-group">
+            <label for="name" class="form-label">Full Name</label>
+            <input type="text" id="name" required placeholder="e.g. Vikramaditya Singhania" class="form-input">
+          </div>
+          
+          <div class="form-group">
+            <label for="phone" class="form-label">Phone Number</label>
+            <input type="tel" id="phone" required placeholder="+91 98123 45678" class="form-input">
+          </div>
+
+          <div class="form-group">
+            <label for="email" class="form-label">Email Address</label>
+            <input type="email" id="email" required placeholder="vikram@estate.com" class="form-input">
+          </div>
+
+          <div class="form-group">
+            <label for="message" class="form-label">Message / Preferred Dates</label>
+            <textarea id="message" rows="4" placeholder="I would like to request a private viewing for this weekend..." class="form-textarea"></textarea>
+          </div>
+
+          <button type="submit" class="btn-pill btn-primary" style="width: 100%;">
+            <span>Submit Inquiry</span>
+          </button>
+
+          <div class="toast-msg" id="form-toast" role="alert">
+            Thank you. Your viewing request has been received. Our concierge will contact you within 2 hours.
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- 10. ABOUT THIS PROJECT SECTION -->
+    <section class="about-project-section" id="about-project" aria-label="About This Project">
+      <div class="about-project-wrapper">
+        <span class="about-project-eyebrow">Crafted Web Experience</span>
+        <h2 class="about-project-title">About This Project</h2>
+        <p class="about-project-copy">Villa Serena is a cinematic luxury residence concept created to demonstrate premium interactive web experiences. The project combines scroll-driven storytelling, cinematic image sequences, refined motion design, and immersive user interaction to showcase the future of luxury real estate presentation.</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- 11. FOOTER -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-content">
+      <div class="footer-top">
+        <a href="#hero" aria-label="Return to Hero Section">
+          <img src="Brand/Logo.png" alt="Villa Serena" class="footer-logo">
+        </a>
+        
+        <div class="footer-socials">
+          <a href="https://instagram.com/raj.thinkss" target="_blank" rel="noopener" class="footer-social-link" aria-label="Instagram @raj.thinkss">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </a>
+          <a href="mailto:villaserena@gmail.com" class="footer-social-link" aria-label="Email Concierge">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </a>
+        </div>
+
+        <a href="#hero" class="back-to-top-btn" id="back-to-top" aria-label="Scroll Back To Top">
+          <span>Back To Top</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+        </a>
+      </div>
+
+      <p class="footer-disclaimer">Villa Serena — Lonavala, Pune. Concept property, created for demonstration purposes.</p>
+      <p class="footer-credits">Built & Designed by Raj · Interactive Luxury Web Experiences · © 2026</p>
+    </div>
+  </footer>
+
+  <!-- Toast Notification for Email Copy -->
+  <div class="toast-msg" id="email-toast" style="position: fixed; bottom: 2rem; right: 2rem; z-index: 10005;" role="alert">
+    Email copied to clipboard: villaserena@gmail.com
+  </div>
+
+  <!-- Scripts -->
+  <!-- GSAP & ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <!-- Lenis Smooth Scroll -->
+  <script src="https://unpkg.com/lenis@1.1.14/dist/lenis.min.js"></script>
+
+  <!-- App Main Logic -->
+  <script src="app.js"></script>
+</body>
+</html>

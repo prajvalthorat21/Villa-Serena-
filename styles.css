@@ -20,7 +20,7 @@
   --c-cream-80: rgba(251, 250, 246, 0.85);
   --c-cream-10: rgba(251, 250, 246, 0.1);
   --c-charcoal-80: rgba(20, 18, 16, 0.8);
-  --c-glass-bg: rgba(31, 25, 18, 0.75);
+  --c-glass-bg: rgba(31, 25, 18, 0.78);
   --c-glass-border: rgba(237, 231, 219, 0.15);
 
   /* Typography */
@@ -139,6 +139,7 @@ p {
   inset: 0;
   width: 100vw;
   height: 100vh;
+  height: 100dvh;
   pointer-events: none;
   z-index: 9995;
   opacity: 0.02;
@@ -226,7 +227,7 @@ body.hovering .custom-cursor-follower {
 }
 
 .preloader-logo {
-  height: 64px;
+  height: clamp(48px, 10vw, 64px);
   width: auto;
   object-fit: contain;
   filter: brightness(1.2);
@@ -240,7 +241,7 @@ body.hovering .custom-cursor-follower {
 
 .preloader-title {
   font-family: var(--font-serif);
-  font-size: 2.25rem;
+  font-size: clamp(1.75rem, 5vw, 2.25rem);
   font-weight: 300;
   letter-spacing: 0.25em;
   text-transform: uppercase;
@@ -248,14 +249,14 @@ body.hovering .custom-cursor-follower {
 }
 
 .preloader-sub {
-  font-size: 0.85rem;
+  font-size: clamp(0.75rem, 2vw, 0.85rem);
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: var(--c-brass-light);
 }
 
 .preloader-progress-wrap {
-  width: 240px;
+  width: min(240px, 80vw);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -302,13 +303,13 @@ body.hovering .custom-cursor-follower {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 3rem;
+  padding: 0 clamp(1.25rem, 4vw, 3rem);
   transition: background-color 0.4s ease, backdrop-filter 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
   border-bottom: 1px solid transparent;
 }
 
 .site-nav.scrolled {
-  background-color: rgba(20, 18, 16, 0.85);
+  background-color: rgba(20, 18, 16, 0.88);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-bottom-color: var(--c-glass-border);
@@ -318,18 +319,18 @@ body.hovering .custom-cursor-follower {
 .nav-brand {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.75rem;
 }
 
 .nav-logo-img {
-  height: 36px;
+  height: clamp(28px, 6vw, 36px);
   width: auto;
   object-fit: contain;
 }
 
 .nav-brand-text {
   font-family: var(--font-serif);
-  font-size: 1.25rem;
+  font-size: clamp(1rem, 3vw, 1.25rem);
   font-weight: 400;
   letter-spacing: 0.12em;
   color: var(--c-cream);
@@ -380,7 +381,7 @@ body.hovering .custom-cursor-follower {
 .nav-actions {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1rem;
 }
 
 .btn-pill {
@@ -388,9 +389,9 @@ body.hovering .custom-cursor-follower {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 0.75rem 1.75rem;
+  padding: clamp(0.6rem, 2vw, 0.75rem) clamp(1.25rem, 3vw, 1.75rem);
   border-radius: var(--radius-pill);
-  font-size: 0.85rem;
+  font-size: clamp(0.75rem, 2vw, 0.85rem);
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -444,9 +445,12 @@ body.hovering .custom-cursor-follower {
 .burger-btn {
   display: none;
   flex-direction: column;
+  justify-content: center;
   gap: 6px;
   padding: 8px;
   z-index: 1002;
+  width: 40px;
+  height: 40px;
 }
 
 .burger-line {
@@ -469,6 +473,9 @@ body.hovering .custom-cursor-follower {
   gap: 2.5rem;
   transform: translateX(100%);
   transition: transform 0.5s var(--ease-out-expo);
+  padding: 2rem;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
 .mobile-nav-drawer.active {
@@ -480,15 +487,21 @@ body.hovering .custom-cursor-follower {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2rem;
+  gap: 1.75rem;
 }
 
 .mobile-nav-links a {
   font-family: var(--font-serif);
-  font-size: 2rem;
+  font-size: clamp(1.5rem, 5vw, 2.25rem);
   font-weight: 300;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   color: var(--c-cream);
+  transition: color 0.3s ease;
+}
+
+.mobile-nav-links a:hover,
+.mobile-nav-links a:focus {
+  color: var(--c-brass-light);
 }
 
 /* --------------------------------------------------------------------------
@@ -498,6 +511,7 @@ body.hovering .custom-cursor-follower {
   position: relative;
   width: 100%;
   height: 100vh;
+  height: 100dvh;
   pointer-events: none;
   z-index: 10;
 }
@@ -508,8 +522,8 @@ body.hovering .custom-cursor-follower {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 6rem 4rem 5rem 4rem;
-  background: linear-gradient(180deg, rgba(20, 18, 16, 0.4) 0%, rgba(20, 18, 16, 0.1) 40%, rgba(20, 18, 16, 0.85) 100%);
+  padding: clamp(3rem, 8vw, 6rem) clamp(1.5rem, 5vw, 4rem) clamp(2.5rem, 6vw, 5rem);
+  background: linear-gradient(180deg, rgba(20, 18, 16, 0.4) 0%, rgba(20, 18, 16, 0.1) 40%, rgba(20, 18, 16, 0.88) 100%);
 }
 
 .hero-content {
@@ -521,24 +535,24 @@ body.hovering .custom-cursor-follower {
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
-  font-size: 0.85rem;
+  font-size: clamp(0.75rem, 2vw, 0.85rem);
   font-weight: 500;
-  letter-spacing: 0.25em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--c-brass-light);
-  margin-bottom: 1rem;
+  margin-bottom: 0.85rem;
 }
 
 .hero-eyebrow::before {
   content: '';
-  width: 32px;
+  width: 28px;
   height: 1px;
   background-color: var(--c-brass-light);
 }
 
 .hero-title {
   font-family: var(--font-serif);
-  font-size: clamp(3.5rem, 8vw, 6.5rem);
+  font-size: clamp(2.75rem, 8.5vw, 6.5rem);
   font-weight: 300;
   line-height: 1.05;
   color: var(--c-cream);
@@ -547,12 +561,12 @@ body.hovering .custom-cursor-follower {
 }
 
 .hero-sub {
-  font-size: 1.15rem;
+  font-size: clamp(0.95rem, 2.5vw, 1.15rem);
   font-weight: 300;
   color: var(--c-limestone);
   opacity: 0.9;
   max-width: 580px;
-  margin-bottom: 2.5rem;
+  margin-bottom: 2.25rem;
   line-height: 1.7;
 }
 
@@ -560,15 +574,15 @@ body.hovering .custom-cursor-follower {
   display: inline-flex;
   align-items: center;
   gap: 1rem;
-  font-size: 0.8rem;
-  letter-spacing: 0.2em;
+  font-size: clamp(0.7rem, 2vw, 0.8rem);
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--c-brass-light);
-  opacity: 0.8;
+  opacity: 0.85;
 }
 
 .scroll-cue-line {
-  width: 48px;
+  width: 40px;
   height: 1px;
   background-color: var(--c-brass-light);
   position: relative;
@@ -605,6 +619,7 @@ body.hovering .custom-cursor-follower {
 .room-section {
   position: relative;
   width: 100%;
+  /* 250vh height allocates generous scroll distance per room for deliberate scrubbing */
   height: 250vh;
   overflow: visible;
 }
@@ -613,6 +628,7 @@ body.hovering .custom-cursor-follower {
   position: relative;
   width: 100vw;
   height: 100vh;
+  height: 100dvh;
   max-width: 100%;
   overflow: hidden;
   z-index: 1;
@@ -638,7 +654,7 @@ body.hovering .custom-cursor-follower {
   pointer-events: none;
   display: flex;
   align-items: center;
-  padding: 0 6vw;
+  padding: 0 clamp(1.25rem, 5vw, 6vw);
 }
 
 .wt-callout-overlay.align-left {
@@ -651,8 +667,9 @@ body.hovering .custom-cursor-follower {
 
 .wt-callout {
   pointer-events: auto;
+  width: 100%;
   max-width: 460px;
-  padding: 2.5rem 2.75rem;
+  padding: clamp(1.5rem, 4vw, 2.75rem);
   background: var(--c-glass-bg);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -670,49 +687,50 @@ body.hovering .custom-cursor-follower {
 }
 
 .wt-callout-eyebrow {
-  font-size: 0.75rem;
+  font-size: clamp(0.7rem, 2vw, 0.75rem);
   font-weight: 600;
   letter-spacing: 0.25em;
   text-transform: uppercase;
   color: var(--c-brass-light);
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.65rem;
   display: block;
 }
 
 .wt-callout-title {
   font-family: var(--font-serif);
-  font-size: 2rem;
+  font-size: clamp(1.4rem, 4vw, 2rem);
   font-weight: 400;
   line-height: 1.2;
   color: var(--c-cream);
-  margin-bottom: 1rem;
+  margin-bottom: 0.85rem;
 }
 
 .wt-callout-copy {
-  font-size: 0.95rem;
-  line-height: 1.7;
+  font-size: clamp(0.85rem, 2.5vw, 0.95rem);
+  line-height: 1.65;
   color: var(--c-limestone);
-  opacity: 0.85;
+  opacity: 0.88;
 }
 
 .wt-room-indicator {
   position: absolute;
-  bottom: 2.5rem;
-  right: 3rem;
+  bottom: clamp(1.5rem, 4vw, 2.5rem);
+  right: clamp(1.25rem, 4vw, 3rem);
   z-index: 3;
   display: flex;
   align-items: center;
-  gap: 1rem;
-  font-size: 0.8rem;
+  gap: 0.75rem;
+  font-size: clamp(0.7rem, 2vw, 0.8rem);
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--c-brass-light);
   pointer-events: none;
   background: var(--c-glass-bg);
-  padding: 0.5rem 1.25rem;
+  padding: 0.45rem 1.15rem;
   border-radius: var(--radius-pill);
   border: 1px solid var(--c-glass-border);
   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 /* --------------------------------------------------------------------------
@@ -721,29 +739,29 @@ body.hovering .custom-cursor-follower {
 .amenities-section {
   position: relative;
   background-color: var(--c-espresso-dark);
-  padding: 8rem 4rem;
+  padding: clamp(5rem, 10vw, 8rem) clamp(1.25rem, 5vw, 4rem);
   z-index: 10;
 }
 
 .section-header {
   text-align: center;
   max-width: 680px;
-  margin: 0 auto 5rem auto;
+  margin: 0 auto clamp(3rem, 6vw, 5rem) auto;
 }
 
 .section-eyebrow {
-  font-size: 0.8rem;
+  font-size: clamp(0.75rem, 2vw, 0.8rem);
   font-weight: 600;
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: var(--c-brass-light);
-  margin-bottom: 1rem;
+  margin-bottom: 0.85rem;
   display: block;
 }
 
 .section-title {
   font-family: var(--font-serif);
-  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-size: clamp(2rem, 5vw, 4rem);
   font-weight: 300;
   color: var(--c-cream);
   line-height: 1.15;
@@ -751,15 +769,16 @@ body.hovering .custom-cursor-follower {
 }
 
 .section-sub {
-  font-size: 1rem;
+  font-size: clamp(0.9rem, 2.5vw, 1rem);
   color: var(--c-limestone);
   opacity: 0.8;
+  margin: 0 auto;
 }
 
 .amenities-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
+  gap: clamp(1.25rem, 3vw, 2rem);
   max-width: var(--container-max);
   margin: 0 auto;
 }
@@ -768,10 +787,10 @@ body.hovering .custom-cursor-follower {
   background: rgba(251, 250, 246, 0.03);
   border: 1px solid var(--c-glass-border);
   border-radius: var(--radius-md);
-  padding: 3rem 2.5rem;
+  padding: clamp(2rem, 4vw, 3rem) clamp(1.5rem, 3vw, 2.5rem);
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1.25rem;
   transition: transform 0.35s var(--ease-out-expo), background-color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
 }
 
@@ -783,8 +802,8 @@ body.hovering .custom-cursor-follower {
 }
 
 .amenity-icon-wrap {
-  width: 56px;
-  height: 56px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
   background: rgba(138, 109, 78, 0.15);
   border: 1px solid rgba(138, 109, 78, 0.3);
@@ -802,8 +821,8 @@ body.hovering .custom-cursor-follower {
 }
 
 .amenity-icon-wrap svg {
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
   stroke: currentColor;
   stroke-width: 1.5;
   fill: none;
@@ -811,13 +830,13 @@ body.hovering .custom-cursor-follower {
 
 .amenity-card-title {
   font-family: var(--font-serif);
-  font-size: 1.5rem;
+  font-size: clamp(1.25rem, 3vw, 1.5rem);
   font-weight: 400;
   color: var(--c-cream);
 }
 
 .amenity-card-desc {
-  font-size: 0.95rem;
+  font-size: clamp(0.85rem, 2vw, 0.95rem);
   color: var(--c-limestone);
   opacity: 0.75;
   line-height: 1.6;
@@ -829,14 +848,14 @@ body.hovering .custom-cursor-follower {
 .gallery-section {
   position: relative;
   background-color: var(--c-charcoal);
-  padding: 8rem 4rem;
+  padding: clamp(5rem, 10vw, 8rem) clamp(1.25rem, 5vw, 4rem);
   z-index: 10;
 }
 
 .gallery-grid {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  gap: 1.5rem;
+  gap: clamp(1rem, 2vw, 1.5rem);
   max-width: var(--container-max);
   margin: 0 auto;
 }
@@ -870,11 +889,13 @@ body.hovering .custom-cursor-follower {
   pointer-events: none;
 }
 
-.gallery-item:hover .gallery-motion {
+.gallery-item:hover .gallery-motion,
+.gallery-item.playing-video .gallery-motion {
   opacity: 1;
 }
 
-.gallery-item:hover .gallery-still {
+.gallery-item:hover .gallery-still,
+.gallery-item.playing-video .gallery-still {
   opacity: 0;
   transform: scale(1.06);
 }
@@ -887,13 +908,14 @@ body.hovering .custom-cursor-follower {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 2rem;
+  padding: 1.75rem;
   transition: opacity 0.4s ease, transform 0.4s var(--ease-out-expo);
   z-index: 2;
   transform: translateY(10px);
 }
 
-.gallery-item:hover .gallery-overlay {
+.gallery-item:hover .gallery-overlay,
+.gallery-item.playing-video .gallery-overlay {
   opacity: 1;
   transform: translateY(0);
 }
@@ -909,7 +931,7 @@ body.hovering .custom-cursor-follower {
 
 .gallery-caption {
   font-family: var(--font-serif);
-  font-size: 1.25rem;
+  font-size: clamp(1.1rem, 2.5vw, 1.25rem);
   color: var(--c-cream);
 }
 
@@ -922,7 +944,7 @@ body.hovering .custom-cursor-follower {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 2rem;
+  padding: 1.5rem;
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.4s ease, visibility 0.4s ease;
@@ -959,8 +981,8 @@ body.hovering .custom-cursor-follower {
 
 .lightbox-close {
   position: absolute;
-  top: 2.5rem;
-  right: 3rem;
+  top: clamp(1.5rem, 4vw, 2.5rem);
+  right: clamp(1.5rem, 4vw, 3rem);
   color: var(--c-cream);
   font-size: 2rem;
   cursor: pointer;
@@ -978,7 +1000,7 @@ body.hovering .custom-cursor-follower {
 .location-section {
   position: relative;
   background-color: var(--c-espresso-dark);
-  padding: 8rem 4rem;
+  padding: clamp(5rem, 10vw, 8rem) clamp(1.25rem, 5vw, 4rem);
   z-index: 10;
 }
 
@@ -987,26 +1009,26 @@ body.hovering .custom-cursor-follower {
   margin: 0 auto;
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
-  gap: 4rem;
+  gap: clamp(2.5rem, 5vw, 4rem);
   align-items: center;
 }
 
 .location-content {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.75rem;
 }
 
 .location-title {
   font-family: var(--font-serif);
-  font-size: 3rem;
+  font-size: clamp(2.25rem, 5vw, 3rem);
   font-weight: 300;
   color: var(--c-cream);
   line-height: 1.15;
 }
 
 .location-desc {
-  font-size: 1.05rem;
+  font-size: clamp(0.95rem, 2.5vw, 1.05rem);
   color: var(--c-limestone);
   opacity: 0.85;
   line-height: 1.7;
@@ -1022,7 +1044,7 @@ body.hovering .custom-cursor-follower {
   display: flex;
   align-items: center;
   gap: 1.2rem;
-  padding: 1.3rem 1.5rem;
+  padding: clamp(1rem, 2.5vw, 1.3rem) clamp(1.15rem, 3vw, 1.5rem);
   background: rgba(251, 250, 246, 0.03);
   border: 1px solid var(--c-glass-border);
   border-radius: var(--radius-md);
@@ -1048,7 +1070,7 @@ body.hovering .custom-cursor-follower {
 
 .location-text strong {
   font-family: var(--font-serif);
-  font-size: 1.05rem;
+  font-size: clamp(0.95rem, 2.5vw, 1.05rem);
   color: var(--c-cream);
 }
 
@@ -1060,7 +1082,7 @@ body.hovering .custom-cursor-follower {
 }
 
 .location-time {
-  font-size: 0.82rem;
+  font-size: clamp(0.75rem, 2vw, 0.82rem);
   color: var(--c-brass-light);
   font-weight: 600;
   white-space: nowrap;
@@ -1071,7 +1093,7 @@ body.hovering .custom-cursor-follower {
 }
 
 .map-container {
-  height: 480px;
+  height: clamp(340px, 50vh, 480px);
   border-radius: var(--radius-md);
   overflow: hidden;
   border: 1px solid var(--c-glass-border);
@@ -1091,7 +1113,7 @@ body.hovering .custom-cursor-follower {
 .pricing-section {
   position: relative;
   background-color: var(--c-charcoal);
-  padding: 8rem 4rem;
+  padding: clamp(5rem, 10vw, 8rem) clamp(1.25rem, 5vw, 4rem);
   z-index: 10;
   text-align: center;
   border-top: 1px solid var(--c-glass-border);
@@ -1101,7 +1123,7 @@ body.hovering .custom-cursor-follower {
 .pricing-box {
   max-width: 900px;
   margin: 0 auto;
-  padding: 4.5rem 3rem;
+  padding: clamp(3rem, 6vw, 4.5rem) clamp(1.5rem, 5vw, 3rem);
   background: linear-gradient(135deg, rgba(61, 50, 38, 0.4) 0%, rgba(31, 25, 18, 0.6) 100%);
   border: 1px solid var(--c-glass-border);
   border-radius: var(--radius-lg);
@@ -1122,18 +1144,18 @@ body.hovering .custom-cursor-follower {
 }
 
 .pricing-eyebrow {
-  font-size: 0.85rem;
+  font-size: clamp(0.75rem, 2vw, 0.85rem);
   font-weight: 600;
   letter-spacing: 0.25em;
   text-transform: uppercase;
   color: var(--c-brass-light);
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
   display: block;
 }
 
 .pricing-amount {
   font-family: var(--font-serif);
-  font-size: clamp(3.5rem, 8vw, 6rem);
+  font-size: clamp(3rem, 10vw, 6rem);
   font-weight: 300;
   color: var(--c-cream);
   line-height: 1;
@@ -1145,11 +1167,11 @@ body.hovering .custom-cursor-follower {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 1.5rem;
-  margin-bottom: 3rem;
-  font-size: 0.95rem;
+  gap: clamp(0.85rem, 2.5vw, 1.5rem);
+  margin-bottom: 2.5rem;
+  font-size: clamp(0.85rem, 2.5vw, 0.95rem);
   color: var(--c-limestone);
-  opacity: 0.85;
+  opacity: 0.88;
 }
 
 .pricing-specs span {
@@ -1159,7 +1181,7 @@ body.hovering .custom-cursor-follower {
 
 .pricing-specs span:not(:last-child)::after {
   content: '•';
-  margin-left: 1.5rem;
+  margin-left: clamp(0.85rem, 2.5vw, 1.5rem);
   color: var(--c-brass);
 }
 
@@ -1169,7 +1191,7 @@ body.hovering .custom-cursor-follower {
 .contact-section {
   position: relative;
   background-color: var(--c-espresso-dark);
-  padding: 8rem 4rem;
+  padding: clamp(5rem, 10vw, 8rem) clamp(1.25rem, 5vw, 4rem);
   z-index: 10;
 }
 
@@ -1178,25 +1200,25 @@ body.hovering .custom-cursor-follower {
   margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr 1.2fr;
-  gap: 5rem;
+  gap: clamp(3rem, 6vw, 5rem);
 }
 
 .contact-info {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.75rem;
 }
 
 .contact-title {
   font-family: var(--font-serif);
-  font-size: 3rem;
+  font-size: clamp(2.25rem, 5vw, 3rem);
   font-weight: 300;
   color: var(--c-cream);
   line-height: 1.15;
 }
 
 .contact-sub {
-  font-size: 1rem;
+  font-size: clamp(0.9rem, 2.5vw, 1rem);
   color: var(--c-limestone);
   opacity: 0.85;
   line-height: 1.7;
@@ -1206,18 +1228,19 @@ body.hovering .custom-cursor-follower {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  margin-top: 1rem;
+  margin-top: 0.5rem;
 }
 
 .channel-link {
   display: flex;
   align-items: center;
   gap: 1.25rem;
-  padding: 1.25rem 1.75rem;
+  padding: clamp(1rem, 2.5vw, 1.25rem) clamp(1.25rem, 3vw, 1.75rem);
   background: rgba(251, 250, 246, 0.03);
   border: 1px solid var(--c-glass-border);
   border-radius: var(--radius-md);
   color: var(--c-cream);
+  font-size: clamp(0.85rem, 2.5vw, 0.95rem);
   font-weight: 500;
   transition: all 0.3s ease;
 }
@@ -1233,7 +1256,7 @@ body.hovering .custom-cursor-follower {
   flex-direction: column;
   gap: 1.5rem;
   background: rgba(31, 25, 18, 0.4);
-  padding: 3.5rem;
+  padding: clamp(2rem, 5vw, 3.5rem);
   border-radius: var(--radius-lg);
   border: 1px solid var(--c-glass-border);
 }
@@ -1303,7 +1326,7 @@ body.hovering .custom-cursor-follower {
 .about-project-section {
   position: relative;
   background-color: var(--c-charcoal);
-  padding: 7rem 4rem;
+  padding: clamp(4rem, 8vw, 7rem) clamp(1.25rem, 5vw, 4rem);
   z-index: 10;
   border-top: 1px solid var(--c-glass-border);
 }
@@ -1315,7 +1338,7 @@ body.hovering .custom-cursor-follower {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1.25rem;
 }
 
 .about-project-eyebrow {
@@ -1328,17 +1351,18 @@ body.hovering .custom-cursor-follower {
 
 .about-project-title {
   font-family: var(--font-serif);
-  font-size: 2.25rem;
+  font-size: clamp(1.75rem, 4vw, 2.25rem);
   font-weight: 300;
   color: var(--c-cream);
 }
 
 .about-project-copy {
-  font-size: 1.05rem;
+  font-size: clamp(0.9rem, 2.5vw, 1.05rem);
   line-height: 1.8;
   color: var(--c-limestone);
   opacity: 0.85;
   max-width: 720px;
+  margin: 0 auto;
 }
 
 /* --------------------------------------------------------------------------
@@ -1346,7 +1370,7 @@ body.hovering .custom-cursor-follower {
    -------------------------------------------------------------------------- */
 .site-footer {
   background-color: var(--c-espresso-dark);
-  padding: 5rem 4rem 3rem 4rem;
+  padding: clamp(3.5rem, 8vw, 5rem) clamp(1.25rem, 5vw, 4rem) clamp(2rem, 5vw, 3rem);
   border-top: 1px solid var(--c-glass-border);
   color: var(--c-limestone);
   font-size: 0.85rem;
@@ -1359,7 +1383,7 @@ body.hovering .custom-cursor-follower {
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 2.5rem;
+  gap: 2.25rem;
   align-items: center;
   text-align: center;
 }
@@ -1374,14 +1398,14 @@ body.hovering .custom-cursor-follower {
 }
 
 .footer-logo {
-  height: 44px;
+  height: clamp(36px, 8vw, 44px);
   width: auto;
 }
 
 .footer-socials {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1.25rem;
 }
 
 .footer-social-link {
@@ -1436,6 +1460,7 @@ body.hovering .custom-cursor-follower {
    -------------------------------------------------------------------------- */
 .error-page-body {
   height: 100vh;
+  height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1443,12 +1468,12 @@ body.hovering .custom-cursor-follower {
 }
 
 .error-page-container {
-  padding: 2rem;
+  padding: 1.5rem;
 }
 
 .error-card {
   max-width: 520px;
-  padding: 4rem 3rem;
+  padding: clamp(2.5rem, 6vw, 4rem) clamp(1.5rem, 5vw, 3rem);
   background: var(--c-glass-bg);
   border: 1px solid var(--c-glass-border);
   border-radius: var(--radius-lg);
@@ -1458,12 +1483,13 @@ body.hovering .custom-cursor-follower {
   align-items: center;
   text-align: center;
   backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
 
 .error-logo {
-  height: 56px;
+  height: clamp(44px, 8vw, 56px);
   width: auto;
-  margin-bottom: 2rem;
+  margin-bottom: 1.75rem;
 }
 
 .error-badge {
@@ -1472,22 +1498,22 @@ body.hovering .custom-cursor-follower {
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: var(--c-brass-light);
-  margin-bottom: 1rem;
+  margin-bottom: 0.85rem;
 }
 
 .error-title {
   font-family: var(--font-serif);
-  font-size: 2.5rem;
+  font-size: clamp(2rem, 5vw, 2.5rem);
   font-weight: 300;
   color: var(--c-cream);
-  margin-bottom: 1rem;
+  margin-bottom: 0.85rem;
 }
 
 .error-message {
   font-size: 1rem;
   color: var(--c-limestone);
   opacity: 0.8;
-  margin-bottom: 2.5rem;
+  margin-bottom: 2.25rem;
 }
 
 .error-btn {
@@ -1495,7 +1521,7 @@ body.hovering .custom-cursor-follower {
 }
 
 /* --------------------------------------------------------------------------
-   Responsive Media Queries
+   Responsive Media Queries & Mobile Parity Adaptations
    -------------------------------------------------------------------------- */
 @media (max-width: 1024px) {
   .site-nav { padding: 0 2rem; }
@@ -1533,26 +1559,135 @@ body.hovering .custom-cursor-follower {
 }
 
 @media (max-width: 768px) {
-  .hero-overlay { padding: 4rem 2rem 3rem 2rem; }
-  .hero-title { font-size: 3rem; }
+  .site-nav {
+    padding: 0 clamp(0.75rem, 3vw, 1.25rem);
+    height: 72px;
+  }
+
+  .nav-brand {
+    gap: 0.5rem;
+    flex-shrink: 1;
+    min-width: 0;
+  }
+
+  .nav-logo-img {
+    height: clamp(24px, 5.5vw, 30px);
+  }
+
+  .nav-brand-text {
+    font-size: clamp(0.85rem, 2.5vw, 1.05rem);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .nav-actions {
+    gap: clamp(0.35rem, 1.5vw, 0.75rem);
+    flex-shrink: 0;
+  }
+
+  .nav-actions .btn-pill {
+    padding: clamp(0.45rem, 1.5vw, 0.55rem) clamp(0.75rem, 2vw, 1rem);
+    font-size: clamp(0.68rem, 1.8vw, 0.75rem);
+    letter-spacing: 0.04em;
+  }
+
+  .burger-btn {
+    width: 36px;
+    height: 36px;
+    padding: 4px;
+    flex-shrink: 0;
+  }
+  
+  .hero-overlay { 
+    padding: 3.25rem 1.25rem 2.25rem 1.25rem; 
+  }
+
+  .hero-eyebrow {
+    font-size: clamp(0.7rem, 2.2vw, 0.78rem);
+    letter-spacing: 0.2em;
+    margin-bottom: 0.5rem;
+  }
+
+  .hero-title {
+    font-size: clamp(2.4rem, 8vw, 3.5rem);
+    margin-bottom: 0.75rem;
+    line-height: 1.05;
+  }
+
+  .hero-sub {
+    font-size: clamp(0.88rem, 2.6vw, 1rem);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    max-width: 420px;
+  }
+
+  .hero-scroll-cue {
+    font-size: clamp(0.65rem, 2vw, 0.72rem);
+    letter-spacing: 0.16em;
+  }
+
+  .wt-callout-overlay {
+    padding: 0 1rem;
+    align-items: flex-end;
+    padding-bottom: 3.25rem;
+  }
+
+  .wt-callout-overlay.align-left,
+  .wt-callout-overlay.align-right {
+    justify-content: center;
+  }
+
+  /* Room Information Cards — Small Final 5-10% Vertical Reduction */
+  .wt-callout {
+    width: 90%;
+    max-width: 380px;
+    margin: 0 auto;
+    padding: 0.75rem 1rem;
+    background: rgba(25, 20, 15, 0.84);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-radius: var(--radius-md);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  }
+
+  .wt-callout-eyebrow {
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    margin-bottom: 0.2rem;
+  }
+
+  .wt-callout-title {
+    font-size: clamp(1.05rem, 3.6vw, 1.25rem);
+    margin-bottom: 0.25rem;
+    line-height: 1.18;
+  }
+
+  .wt-callout-copy {
+    font-size: clamp(0.74rem, 2.2vw, 0.82rem);
+    line-height: 1.42;
+    opacity: 0.88;
+  }
+
+  .wt-room-indicator {
+    bottom: 0.95rem;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    padding: 0.2rem 0.75rem;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    white-space: nowrap;
+  }
 
   .amenities-grid {
     grid-template-columns: 1fr;
   }
 
-  .amenities-section,
-  .gallery-section,
-  .location-section,
-  .pricing-section,
-  .contact-section,
-  .about-project-section,
-  .site-footer {
-    padding: 5rem 1.5rem;
-  }
-
   .gallery-grid {
     grid-template-columns: 1fr;
   }
+  
   .gallery-item.col-8, .gallery-item.col-4,
   .gallery-item.col-5, .gallery-item.col-7,
   .gallery-item.col-6 {
@@ -1560,16 +1695,38 @@ body.hovering .custom-cursor-follower {
     height: 320px;
   }
 
-  .wt-callout {
-    max-width: 90vw;
-    padding: 1.75rem 1.5rem;
+  .location-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
   }
-  .wt-room-indicator {
-    bottom: 1.5rem;
-    right: 1.5rem;
+
+  .location-time {
+    align-self: flex-start;
   }
+
+  .pricing-box {
+    padding: 3rem 1.25rem;
+  }
+
   .contact-form {
-    padding: 2rem 1.5rem;
+    padding: 1.75rem 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-title {
+    font-size: 2.65rem;
+  }
+  
+  .gallery-item.col-8, .gallery-item.col-4,
+  .gallery-item.col-5, .gallery-item.col-7,
+  .gallery-item.col-6 {
+    height: 270px;
+  }
+  
+  .pricing-amount {
+    font-size: 2.75rem;
   }
 }
 

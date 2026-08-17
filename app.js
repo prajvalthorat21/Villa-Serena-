@@ -21,9 +21,10 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
 
   // --------------------------------------------------------------------------
-  // 1. Lenis Smooth Scroll Setup
+  // 1. Lenis Smooth Scroll Setup (Full Desktop & Mobile Parity)
   // --------------------------------------------------------------------------
   let lenis = null;
   if (!prefersReducedMotion && typeof Lenis !== 'undefined') {
@@ -31,6 +32,8 @@ document.addEventListener('DOMContentLoaded', () => {
       duration: 1.3,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
+      smoothTouch: true, // Smooth touch scrubbing on mobile
+      touchMultiplier: 1.3,
       wheelMultiplier: 0.95
     });
 
@@ -64,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // --------------------------------------------------------------------------
-  // 2. Preloading & Progressive Image Loader
+  // 2. Mobile-First Preloading & Progressive Image Loader
   // --------------------------------------------------------------------------
   function loadSingleFrame(folder, index) {
     return new Promise((resolve) => {
@@ -94,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Preload initial priority frames
+  // Preload initial priority frames (optimized for quick mobile initial interactivity)
   async function preloadPriorityAssets() {
     const preloaderFill = document.getElementById('preloader-fill');
     const preloaderCounter = document.getElementById('preloader-counter');
@@ -169,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // --------------------------------------------------------------------------
-  // 3. Canvas Sizing & Cover Aspect Ratio Renderer
+  // 3. Canvas Sizing & Responsive Cover Aspect Ratio Renderer
   // --------------------------------------------------------------------------
   function renderFrameToCanvas(canvas, img) {
     if (!canvas || !img) return;
@@ -206,6 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Resize all room canvases for full viewport fill & high-DPI scaling
+  let lastWindowWidth = window.innerWidth;
   function resizeCanvases() {
     const dpr = window.devicePixelRatio || 1;
     const w = window.innerWidth;
@@ -220,9 +224,16 @@ document.addEventListener('DOMContentLoaded', () => {
         canvas.style.height = '100%';
       }
     });
+
+    lastWindowWidth = w;
   }
 
-  window.addEventListener('resize', resizeCanvases);
+  window.addEventListener('resize', () => {
+    // Prevent canvas redraw flickering when mobile address bar collapses/expands
+    if (Math.abs(window.innerWidth - lastWindowWidth) > 10 || !isTouchDevice) {
+      resizeCanvases();
+    }
+  });
   resizeCanvases();
 
   // --------------------------------------------------------------------------
@@ -244,14 +255,14 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      // ScrollTrigger with PINNING enabled per room section
+      // ScrollTrigger with PINNING enabled per room section (Full Mobile & Desktop Parity)
       ScrollTrigger.create({
         trigger: section,
         pin: pinElement,
         pinSpacing: false,
         start: 'top top',
         end: 'bottom bottom',
-        scrub: 0.7, // Smooth damping to prevent rushing through frames
+        scrub: 0.7, // Smooth damping for natural touch & wheel scrubbing
         onUpdate: (self) => {
           const progress = self.progress;
           const frameIndex = Math.min(room.frames - 1, Math.floor(progress * room.frames));
@@ -274,14 +285,15 @@ document.addEventListener('DOMContentLoaded', () => {
             }
           }
 
-          // Soft cross-fade opacity transition into next room at section boundary
-          if (roomIdx < ROOMS.length - 1) {
-            if (progress > 0.85) {
-              const fadeOut = (1.0 - progress) / 0.15;
-              canvas.style.opacity = fadeOut.toFixed(2);
-            } else {
-              canvas.style.opacity = '1';
-            }
+          // Intentional, cinematic cross-fade transition between rooms
+          if (progress > 0.88 && roomIdx < ROOMS.length - 1) {
+            const fadeOut = 0.20 + 0.80 * ((1.0 - progress) / 0.12);
+            canvas.style.opacity = fadeOut.toFixed(2);
+          } else if (progress < 0.12 && roomIdx > 0) {
+            const fadeIn = 0.20 + 0.80 * (progress / 0.12);
+            canvas.style.opacity = fadeIn.toFixed(2);
+          } else {
+            canvas.style.opacity = '1';
           }
         }
       });
@@ -389,20 +401,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (burgerBtn && mobileDrawer) {
     burgerBtn.addEventListener('click', () => {
-      mobileDrawer.classList.toggle('active');
+      const isActive = mobileDrawer.classList.toggle('active');
+      burgerBtn.setAttribute('aria-expanded', isActive);
+      if (isActive) {
+        document.body.style.overflow = 'hidden';
+      } else {
+        document.body.style.overflow = '';
+      }
     });
 
     if (mobileLinks && mobileLinks.length) {
       mobileLinks.forEach(link => {
         link.addEventListener('click', () => {
           mobileDrawer.classList.remove('active');
+          burgerBtn.setAttribute('aria-expanded', 'false');
+          document.body.style.overflow = '';
         });
       });
     }
   }
 
   // --------------------------------------------------------------------------
-  // 7. Gallery Motion Video Previews & Lightbox Modal
+  // 7. Gallery Motion Video Previews & Lightbox Modal (Touch & Mobile Parity)
   // --------------------------------------------------------------------------
   const galleryItems = document.querySelectorAll('.gallery-item');
   const lightbox = document.getElementById('lightbox');
@@ -410,24 +430,48 @@ document.addEventListener('DOMContentLoaded', () => {
   const lightboxVideo = document.getElementById('lightbox-video');
   const lightboxClose = document.getElementById('lightbox-close');
 
-  // Motion video previews on hover
-  galleryItems.forEach((item) => {
-    const video = item.querySelector('.gallery-motion');
-    if (!video) return;
+  // Motion video previews on hover (Desktop) and on scroll viewport entry (Mobile)
+  if (isTouchDevice && 'IntersectionObserver' in window) {
+    const videoObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const item = entry.target;
+        const video = item.querySelector('.gallery-motion');
+        if (!video) return;
 
-    item.addEventListener('mouseenter', () => {
-      video.currentTime = 0;
-      const playPromise = video.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(() => {});
-      }
+        if (entry.isIntersecting) {
+          item.classList.add('playing-video');
+          video.currentTime = 0;
+          video.play().catch(() => {});
+        } else {
+          item.classList.remove('playing-video');
+          video.pause();
+        }
+      });
+    }, { threshold: 0.45 });
+
+    galleryItems.forEach(item => videoObserver.observe(item));
+  } else {
+    // Desktop hover handlers
+    galleryItems.forEach((item) => {
+      const video = item.querySelector('.gallery-motion');
+      if (!video) return;
+
+      item.addEventListener('mouseenter', () => {
+        video.currentTime = 0;
+        const playPromise = video.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(() => {});
+        }
+      });
+
+      item.addEventListener('mouseleave', () => {
+        video.pause();
+      });
     });
+  }
 
-    item.addEventListener('mouseleave', () => {
-      video.pause();
-    });
-
-    // Keyboard Accessibility (Enter or Space triggers Lightbox)
+  // Gallery keyboard accessibility
+  galleryItems.forEach(item => {
     item.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
@@ -501,7 +545,6 @@ document.addEventListener('DOMContentLoaded', () => {
           emailToast.classList.remove('active');
         }, 3500);
       }).catch(() => {
-        // Fallback
         alert('Email: villaserena@gmail.com');
       });
     });
@@ -539,7 +582,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const cursor = document.getElementById('cursor');
   const follower = document.getElementById('cursor-follower');
 
-  if (cursor && follower && !prefersReducedMotion) {
+  if (cursor && follower && !prefersReducedMotion && !isTouchDevice) {
     let mouseX = 0, mouseY = 0;
     let followerX = 0, followerY = 0;
 

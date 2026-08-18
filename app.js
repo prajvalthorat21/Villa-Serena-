@@ -1,8 +1,14 @@
 /* ==========================================================================
-   VILLA SERENA — Ultra-Premium Interactive Script (Version 1.0 Final)
+   VILLA SERENA — Ultra-Premium Interactive Script (Version 1.0 Production)
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Prevent browser auto-scroll restoration on page refresh
+  if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual';
+  }
+  window.scrollTo(0, 0);
+
   // Registered Rooms & Specifications
   const ROOMS = [
     { id: 'hero-exterior', folder: 'Hero-Exterior', frames: 80 },
@@ -14,25 +20,29 @@ document.addEventListener('DOMContentLoaded', () => {
     { id: 'final-exterior', folder: 'Final-Exterior', frames: 80 }
   ];
 
-  // Image Cache Store per room
+  // Image Cache Store & Last Rendered Trackers
   const roomImages = {};
+  const lastRenderedFrame = {};
   ROOMS.forEach(room => {
     roomImages[room.folder] = [];
+    lastRenderedFrame[room.folder] = null;
   });
 
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
 
   // --------------------------------------------------------------------------
-  // 1. Lenis Smooth Scroll Setup (Full Desktop & Mobile Parity)
+  // 1. Lenis Smooth Scroll Setup
   // --------------------------------------------------------------------------
   let lenis = null;
+  // Lenis provides smooth inertia scroll when prefersReducedMotion is false.
+  // When prefersReducedMotion is true, standard browser native scroll is used.
   if (!prefersReducedMotion && typeof Lenis !== 'undefined') {
     lenis = new Lenis({
       duration: 1.3,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
-      smoothTouch: true, // Smooth touch scrubbing on mobile
+      smoothTouch: true,
       touchMultiplier: 1.3,
       wheelMultiplier: 0.95
     });
@@ -50,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
     gsap.ticker.lagSmoothing(0);
   }
 
-  // Register GSAP Plugin
+  // Register GSAP ScrollTrigger plugin (Active in BOTH normal and reduced-motion modes)
   if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
     gsap.registerPlugin(ScrollTrigger);
   }
@@ -67,14 +77,20 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // --------------------------------------------------------------------------
-  // 2. Mobile-First Preloading & Progressive Image Loader
+  // 2. High-Reliability Controlled Concurrency Preloading Architecture
   // --------------------------------------------------------------------------
+  const MAX_CONCURRENT_LOADS = 4;
+  let activeLoadsCount = 0;
+  const loadQueue = [];
+
   function loadSingleFrame(folder, index) {
     return new Promise((resolve) => {
       if (roomImages[folder] && roomImages[folder][index]) {
         resolve(roomImages[folder][index]);
         return;
       }
+
+      // Check if already in queue or loading
       const img = new Image();
       img.onload = () => {
         if (!roomImages[folder]) roomImages[folder] = [];
@@ -90,22 +106,51 @@ document.addEventListener('DOMContentLoaded', () => {
           roomImages[folder][index] = fallbackImg;
           resolve(fallbackImg);
         };
-        fallbackImg.onerror = () => resolve(null);
+        fallbackImg.onerror = () => {
+          // Keep last rendered frame intact if network error occurs
+          resolve(lastRenderedFrame[folder] || null);
+        };
         fallbackImg.src = `Scroll-Image-Sequence/${folder}/frame_${frameNum}.jpg`;
       };
+
       img.src = getFramePath(folder, index);
     });
   }
 
-  // Preload initial priority frames (optimized for quick mobile initial interactivity)
+  // Controlled queue worker
+  function processQueue() {
+    while (activeLoadsCount < MAX_CONCURRENT_LOADS && loadQueue.length > 0) {
+      const task = loadQueue.shift();
+      activeLoadsCount++;
+      loadSingleFrame(task.folder, task.index).then((img) => {
+        activeLoadsCount--;
+        if (task.resolve) task.resolve(img);
+        processQueue();
+      });
+    }
+  }
+
+  function enqueueFrameLoad(folder, index) {
+    return new Promise((resolve) => {
+      if (roomImages[folder] && roomImages[folder][index]) {
+        resolve(roomImages[folder][index]);
+        return;
+      }
+      loadQueue.push({ folder, index, resolve });
+      processQueue();
+    });
+  }
+
+  // Preload initial priority assets
+  // Priority: 1) First frame of ALL rooms, 2) Hero room initial sequence
   async function preloadPriorityAssets() {
     const preloaderFill = document.getElementById('preloader-fill');
     const preloaderCounter = document.getElementById('preloader-counter');
-    const heroRoom = ROOMS[0];
-    const priorityCount = 20;
 
     let loadedCount = 0;
-    const totalPriority = priorityCount + (ROOMS.length - 1) * 5;
+    const heroRoom = ROOMS[0];
+    const initialHeroCount = 20;
+    const totalPriority = ROOMS.length + initialHeroCount; // First frame per room + 20 hero frames
 
     function updateProgress() {
       loadedCount++;
@@ -114,78 +159,84 @@ document.addEventListener('DOMContentLoaded', () => {
       if (preloaderCounter) preloaderCounter.textContent = `${percent}%`;
     }
 
-    // Hero priority frames
-    const heroPromises = [];
-    for (let i = 0; i < priorityCount; i++) {
-      heroPromises.push(loadSingleFrame(heroRoom.folder, i).then(updateProgress));
-    }
+    // TIER 1: Load frame_0001 for EVERY room immediately
+    const tier1Promises = ROOMS.map(room => loadSingleFrame(room.folder, 0).then(updateProgress));
+    await Promise.all(tier1Promises);
 
-    // Secondary priority frames (first 5 per remaining room)
-    const secondaryPromises = [];
-    for (let r = 1; r < ROOMS.length; r++) {
-      for (let i = 0; i < 5; i++) {
-        secondaryPromises.push(loadSingleFrame(ROOMS[r].folder, i).then(updateProgress));
-      }
-    }
-
-    await Promise.all([...heroPromises, ...secondaryPromises]);
-
-    // Initial render of first frames onto room canvases
+    // Initial render of frame 0 onto all canvases immediately
     ROOMS.forEach(room => {
       const canvas = document.getElementById(`canvas-${room.id}`);
       if (canvas && roomImages[room.folder] && roomImages[room.folder][0]) {
-        renderFrameToCanvas(canvas, roomImages[room.folder][0]);
+        renderFrameToCanvas(canvas, roomImages[room.folder][0], room.folder);
       }
     });
 
-    // Fade out preloader with luxury 1s reveal sequence
+    // TIER 2: Load initial 20 frames of Hero-Exterior
+    const tier2Promises = [];
+    for (let i = 1; i < initialHeroCount; i++) {
+      tier2Promises.push(loadSingleFrame(heroRoom.folder, i).then(updateProgress));
+    }
+    await Promise.all(tier2Promises);
+
+    // Fade out preloader smoothly
     const preloader = document.getElementById('preloader');
     if (preloader) {
       preloader.classList.add('fade-out');
       setTimeout(() => {
         preloader.style.display = 'none';
         
-        // Trigger smooth Hero overlay entrance
+        // Trigger Hero content entrance
         const heroContent = document.querySelector('.hero-content');
-        if (heroContent && typeof gsap !== 'undefined') {
+        if (heroContent && typeof gsap !== 'undefined' && !prefersReducedMotion) {
           gsap.fromTo(heroContent, 
             { opacity: 0, y: 40 }, 
             { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out' }
           );
+        } else if (heroContent) {
+          heroContent.style.opacity = '1';
         }
       }, 900);
     }
 
-    // Background load remaining frames progressively
+    // TIER 3: Enqueue remaining frames into controlled queue engine
     backgroundLoadRemainingFrames();
   }
 
-  // Background loader for remaining frames of all rooms
-  async function backgroundLoadRemainingFrames() {
-    for (const room of ROOMS) {
+  function backgroundLoadRemainingFrames() {
+    ROOMS.forEach(room => {
       for (let i = 0; i < room.frames; i++) {
         if (!roomImages[room.folder] || !roomImages[room.folder][i]) {
-          await loadSingleFrame(room.folder, i);
+          enqueueFrameLoad(room.folder, i);
         }
       }
-    }
+    });
   }
 
   // --------------------------------------------------------------------------
-  // 3. Canvas Sizing & Responsive Cover Aspect Ratio Renderer
+  // 3. Canvas Sizing & Graceful Aspect Cover Renderer
   // --------------------------------------------------------------------------
-  function renderFrameToCanvas(canvas, img) {
-    if (!canvas || !img) return;
+  function renderFrameToCanvas(canvas, img, folder) {
+    if (!canvas) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
+    // Graceful fallback to last valid frame if img is missing/loading
+    let targetImg = img;
+    if (!targetImg && folder) {
+      targetImg = lastRenderedFrame[folder];
+    }
+    if (!targetImg && folder && roomImages[folder]) {
+      // Find closest loaded frame
+      targetImg = roomImages[folder].find(f => f !== null && f !== undefined);
+    }
+    if (!targetImg) return;
+
     const cw = canvas.width;
     const ch = canvas.height;
-
     ctx.clearRect(0, 0, cw, ch);
 
-    const iw = img.naturalWidth || img.width;
-    const ih = img.naturalHeight || img.height;
+    const iw = targetImg.naturalWidth || targetImg.width;
+    const ih = targetImg.naturalHeight || targetImg.height;
     if (!iw || !ih) return;
 
     const canvasAspect = cw / ch;
@@ -205,7 +256,8 @@ document.addEventListener('DOMContentLoaded', () => {
       offsetY = (ch - renderH) / 2;
     }
 
-    ctx.drawImage(img, offsetX, offsetY, renderW, renderH);
+    ctx.drawImage(targetImg, offsetX, offsetY, renderW, renderH);
+    if (folder) lastRenderedFrame[folder] = targetImg;
   }
 
   // Resize all room canvases for full viewport fill & high-DPI scaling
@@ -222,6 +274,11 @@ document.addEventListener('DOMContentLoaded', () => {
         canvas.height = Math.floor(h * dpr);
         canvas.style.width = '100%';
         canvas.style.height = '100%';
+        
+        // Re-render current last valid frame
+        if (lastRenderedFrame[room.folder]) {
+          renderFrameToCanvas(canvas, lastRenderedFrame[room.folder], room.folder);
+        }
       }
     });
 
@@ -229,7 +286,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   window.addEventListener('resize', () => {
-    // Prevent canvas redraw flickering when mobile address bar collapses/expands
     if (Math.abs(window.innerWidth - lastWindowWidth) > 10 || !isTouchDevice) {
       resizeCanvases();
     }
@@ -237,7 +293,7 @@ document.addEventListener('DOMContentLoaded', () => {
   resizeCanvases();
 
   // --------------------------------------------------------------------------
-  // 4. GSAP Pinned Room Scroll-Scrub & Soft Opacity Cross-Fade Setup
+  // 4. GSAP Pinned Room Scroll-Scrub Architecture (Fully Active in Reduced Motion)
   // --------------------------------------------------------------------------
   function initRoomScrollTriggers() {
     if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
@@ -250,30 +306,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (!section || !pinElement || !canvas) return;
 
-      if (prefersReducedMotion) {
-        if (callout) callout.classList.add('is-visible');
-        return;
-      }
-
-      // ScrollTrigger with PINNING enabled per room section (Full Mobile & Desktop Parity)
+      // ScrollTrigger created for ALL visitors (normal & prefers-reduced-motion)
       ScrollTrigger.create({
         trigger: section,
         pin: pinElement,
         pinSpacing: false,
         start: 'top top',
         end: 'bottom bottom',
-        scrub: 0.7, // Smooth damping for natural touch & wheel scrubbing
+        scrub: prefersReducedMotion ? true : 0.7, // Direct scrub when reduced motion preferred, damped when false
         onUpdate: (self) => {
           const progress = self.progress;
           const frameIndex = Math.min(room.frames - 1, Math.floor(progress * room.frames));
           const img = roomImages[room.folder] ? roomImages[room.folder][frameIndex] : null;
 
           if (img) {
-            renderFrameToCanvas(canvas, img);
+            renderFrameToCanvas(canvas, img, room.folder);
           } else {
+            // Priority fetch missing frame & render last valid frame in interim
             loadSingleFrame(room.folder, frameIndex).then((loadedImg) => {
-              if (loadedImg) renderFrameToCanvas(canvas, loadedImg);
+              if (loadedImg) renderFrameToCanvas(canvas, loadedImg, room.folder);
             });
+            renderFrameToCanvas(canvas, null, room.folder);
           }
 
           // Callout reveal timing
@@ -286,12 +339,16 @@ document.addEventListener('DOMContentLoaded', () => {
           }
 
           // Intentional, cinematic cross-fade transition between rooms
-          if (progress > 0.88 && roomIdx < ROOMS.length - 1) {
-            const fadeOut = 0.20 + 0.80 * ((1.0 - progress) / 0.12);
-            canvas.style.opacity = fadeOut.toFixed(2);
-          } else if (progress < 0.12 && roomIdx > 0) {
-            const fadeIn = 0.20 + 0.80 * (progress / 0.12);
-            canvas.style.opacity = fadeIn.toFixed(2);
+          if (!prefersReducedMotion) {
+            if (progress > 0.88 && roomIdx < ROOMS.length - 1) {
+              const fadeOut = 0.20 + 0.80 * ((1.0 - progress) / 0.12);
+              canvas.style.opacity = fadeOut.toFixed(2);
+            } else if (progress < 0.12 && roomIdx > 0) {
+              const fadeIn = 0.20 + 0.80 * (progress / 0.12);
+              canvas.style.opacity = fadeIn.toFixed(2);
+            } else {
+              canvas.style.opacity = '1';
+            }
           } else {
             canvas.style.opacity = '1';
           }
@@ -304,7 +361,12 @@ document.addEventListener('DOMContentLoaded', () => {
   // 5. Entrance Section Reveal Animations (Titles, Cards, Amenities)
   // --------------------------------------------------------------------------
   function initEntranceAnimations() {
-    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined' || prefersReducedMotion) return;
+    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined' || prefersReducedMotion) {
+      // In reduced motion, ensure elements are directly visible
+      document.querySelectorAll('.section-header, .amenity-card, .gallery-item, .location-row, .about-project-wrapper')
+        .forEach(el => { el.style.opacity = '1'; el.style.transform = 'none'; });
+      return;
+    }
 
     // Section Titles & Headers
     const headers = document.querySelectorAll('.section-header, .location-content > div, .about-project-wrapper');
@@ -422,7 +484,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // --------------------------------------------------------------------------
-  // 7. Gallery Motion Video Previews & Lightbox Modal (Touch & Mobile Parity)
+  // 7. Gallery Motion Video Previews & Media Graceful Fallback
   // --------------------------------------------------------------------------
   const galleryItems = document.querySelectorAll('.gallery-item');
   const lightbox = document.getElementById('lightbox');
@@ -430,7 +492,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const lightboxVideo = document.getElementById('lightbox-video');
   const lightboxClose = document.getElementById('lightbox-close');
 
-  // Motion video previews on hover (Desktop) and on scroll viewport entry (Mobile)
+  function safePlayVideo(video) {
+    if (!video) return;
+    const playPromise = video.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(err => {
+        // Autoplay rejected or unavailable; fallback image remains visible
+      });
+    }
+  }
+
+  // Motion video previews on hover (Desktop) and on scroll viewport entry (Touch)
   if (isTouchDevice && 'IntersectionObserver' in window) {
     const videoObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -438,10 +510,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const video = item.querySelector('.gallery-motion');
         if (!video) return;
 
-        if (entry.isIntersecting) {
+        if (entry.isIntersecting && !prefersReducedMotion) {
           item.classList.add('playing-video');
           video.currentTime = 0;
-          video.play().catch(() => {});
+          safePlayVideo(video);
         } else {
           item.classList.remove('playing-video');
           video.pause();
@@ -457,10 +529,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!video) return;
 
       item.addEventListener('mouseenter', () => {
-        video.currentTime = 0;
-        const playPromise = video.play();
-        if (playPromise !== undefined) {
-          playPromise.catch(() => {});
+        if (!prefersReducedMotion) {
+          video.currentTime = 0;
+          safePlayVideo(video);
         }
       });
 
@@ -487,11 +558,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const src = item.getAttribute('data-src');
         const videoSrc = item.getAttribute('data-video');
 
-        if (videoSrc && lightboxVideo) {
+        if (videoSrc && lightboxVideo && !prefersReducedMotion) {
           lightboxVideo.src = videoSrc;
           lightboxVideo.style.display = 'block';
           if (lightboxImg) lightboxImg.style.display = 'none';
-          lightboxVideo.play().catch(() => {});
+          safePlayVideo(lightboxVideo);
         } else if (src && lightboxImg) {
           lightboxImg.src = src;
           lightboxImg.style.display = 'block';
@@ -577,7 +648,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // --------------------------------------------------------------------------
-  // 9. Custom Magnetic Cursor
+  // 9. Custom Magnetic Cursor (Disabled in Reduced Motion)
   // --------------------------------------------------------------------------
   const cursor = document.getElementById('cursor');
   const follower = document.getElementById('cursor-follower');
